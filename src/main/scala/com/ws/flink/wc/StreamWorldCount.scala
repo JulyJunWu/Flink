@@ -1,4 +1,4 @@
-package com.ws.flink
+package com.ws.flink.wc
 
 import org.apache.flink.streaming.api.scala._
 
@@ -13,7 +13,7 @@ object StreamWorldCount {
     // 创建流处理环境对象
     val environment = StreamExecutionEnvironment.getExecutionEnvironment
     //监听socket源
-    val datasource = environment.socketTextStream("192.168.167.78", 8888)
+    val datasource = environment.socketTextStream(args(0), args(1).toInt)
     // 处理及获取结果
     val result = datasource.flatMap(_.split(" "))
       .filter(_.nonEmpty)
@@ -21,7 +21,7 @@ object StreamWorldCount {
       .keyBy(0)
       .sum(1)
     // 设置并行度,结果打印
-    result.print().setParallelism(2)
+    result.print()
     //提交任务 执行并不断监听数据以及处理
     environment.execute(StreamWorldCount.getClass.getSimpleName)
   }

@@ -1,4 +1,4 @@
-package com.ws.flink
+package com.ws.flink.wc
 
 import org.apache.flink.api.scala._
 
@@ -13,7 +13,9 @@ object WorldCount {
     //创建环境
     val environment = ExecutionEnvironment.getExecutionEnvironment
     //读取数据源
-    val datasource = environment.readTextFile("D:\\workspace\\Flink\\src\\main\\resource\\hello.txt")
+    // "D:\\workspace\\Flink\\src\\main\\resource\\hello.txt"
+    val path = args(0)
+    val datasource = environment.readTextFile(path)
     //数据处理
     val result = datasource.flatMap(_.split(" "))
       .map((_, 1))
